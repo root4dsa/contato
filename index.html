@@ -4,80 +4,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Salvar meu contato</title>
-  <meta name="description" content="Cartão de contato – funciona em iOS e Android" />
+  <meta name="description" content="Cartão de contato – otimizado para iOS" />
   <style>
     :root{--bg:#0f172a;--card:#111827;--text:#e5e7eb;--muted:#9ca3af;--accent:#22c55e}
     *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#0b1022,#111827 30%,#0b1022);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Helvetica,Arial,sans-serif;color:var(--text);display:flex;min-height:100svh;align-items:center;justify-content:center;padding:24px}
     .card{width:min(720px,100%);background:rgba(17,24,39,.7);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
     h1{margin:0 0 6px;font-size:clamp(22px,3.5vw,28px)}
     p{margin:6px 0 18px;color:var(--muted)}
-    .row{display:grid;grid-template-columns:1fr;gap:16px}
     .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 16px;border-radius:14px;text-decoration:none;font-weight:600;border:1px solid rgba(255,255,255,.1);background:#171f36}
     .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.3)}
     .btn.primary{background:linear-gradient(90deg,#22c55e,#16a34a);border-color:transparent;color:#05130a}
     .hint{font-size:13px;color:#9aa3b2;margin-top:6px}
-    .qrwrap{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:8px}
-    .qr{width:148px;height:148px;background:#fff;border-radius:12px;padding:8px}
-    .code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:#0b1022;color:#cbd5e1;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px;overflow:auto}
     .foot{margin-top:18px;font-size:12px;color:#93a0b4}
   </style>
 </head>
 <body>
   <main class="card">
     <h1>Salvar meu contato</h1>
-    <p>Funciona em iPhone (iOS) e Android. Toque no botão abaixo – se não abrir automaticamente, use o QR Code.</p>
+    <p>Funciona em iPhone (iOS). Toque no botão abaixo para adicionar aos Contatos.</p>
 
-    <div class="row">
-      <a id="actionBtn" href="./contato.vcf" class="btn primary" download>Salvar contato (abrir .vcf)</a>
-      <div class="hint" id="hint">Se o Android baixar o arquivo: toque na notificação de download para abrir e salvar nos Contatos.</div>
+    <a href="./contato.vcf" class="btn primary" download>Adicionar contato</a>
+    <div class="hint">O Safari deve abrir a ficha de contato com a opção “Adicionar aos Contatos”.</div>
 
-      <div class="qrwrap">
-        <div id="qrcode" class="qr" aria-label="QR Code para o arquivo vcf"></div>
-        <div>
-          <div class="hint">Também disponível via QR Code. Aponte a câmera para salvar o contato.</div>
-          <div class="code">URL do vCard: <span id="vcfUrl">(carregando…)</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="foot">Dica: adicione esta página à NFC. Esta página detecta seu sistema e escolhe a melhor ação possível.</div>
+    <div class="foot">Dica: grave este link na sua tag NFC para oferecer a melhor experiência no iOS.</div>
   </main>
-
-  <script>
-    // URL do arquivo .vcf — relativo à mesma pasta
-    const vcfUrl = new URL('./contato.vcf', location.href).toString();
-    document.getElementById('vcfUrl').textContent = vcfUrl;
-
-    // Detecção simples de plataforma
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    const isAndroid = /Android/.test(ua);
-
-    const btn = document.getElementById('actionBtn');
-    const hint = document.getElementById('hint');
-
-    // Estratégia: iOS abre .vcf direto (Safari costuma pré-visualizar). Android pode baixar; então guiamos.
-    if (isIOS) {
-      btn.textContent = 'Adicionar contato no iPhone';
-      btn.setAttribute('href', vcfUrl);
-      hint.textContent = 'No iPhone, o Safari deve abrir a ficha de contato com a opção “Adicionar aos Contatos”.';
-    } else if (isAndroid) {
-      btn.textContent = 'Abrir no Android (.vcf)';
-      btn.setAttribute('href', vcfUrl);
-      hint.textContent = 'Se baixar o arquivo, toque na notificação de download para abrir e salvar nos Contatos.';
-    } else {
-      btn.setAttribute('href', vcfUrl);
-    }
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-M0rYw7L6BqX3ZK8Cz9L8xk0oULr5I1fVv7n3Ww0q5vC1u2YwCV8VdG+e1m4rS8eH0m2QyHq4oQXQYqV0C5QX0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script>
-    // Gera o QR code apontando para o .vcf direto
-    new QRCode(document.getElementById('qrcode'), {
-      text: vcfUrl,
-      width: 132,
-      height: 132,
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  </script>
 </body>
 </html>
